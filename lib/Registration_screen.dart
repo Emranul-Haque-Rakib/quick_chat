@@ -1,23 +1,57 @@
 import 'package:flutter/material.dart';
 
-class login extends StatelessWidget {
-
-  static String id ='login_screen';
+class registration extends StatefulWidget {
+  static String id = 'Registration_screen';
 
   @override
+  State<registration> createState() => _registrationState();
+}
+
+class _registrationState extends State<registration>
+    with SingleTickerProviderStateMixin {
+  late Animation animation;
+  late AnimationController controller;
+
+  @override
+  void initState() {
+    super.initState();
+
+    controller =
+        AnimationController(duration: Duration(seconds: 1), vsync: this);
+
+    animation = CurvedAnimation(parent: controller, curve: Curves.easeIn);
+
+    controller.forward();
+
+    animation.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        controller.reverse(from: 1.00);
+      } else if (status == AnimationStatus.dismissed) {
+        controller.forward();
+      }
+    });
+
+    animation.addListener(() {
+      setState(() {});
+    });
+  }
+
+  void dispose(){
+    controller.dispose();
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Hero (
+          Hero(
             tag: 'logo',
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 50),
               child: Container(
-                height: 200,
-
+                height: animation.value * 100,
                 child: Image.asset("lib/images/chat.png"),
               ),
             ),
@@ -57,31 +91,23 @@ class login extends StatelessWidget {
                   hintText: "Provide your Password"),
             ),
           ),
-
           const SizedBox(
             width: 50,
           ),
-
           Padding(
             padding: const EdgeInsets.all(20.0),
-            child: ElevatedButton(onPressed: (){
-
-
-            }, child: Text("LOGIN"),
+            child: ElevatedButton(
+              onPressed: () {},
+              child: Text("Registar"),
               style: ElevatedButton.styleFrom(
                 primary: Colors.blueAccent,
                 minimumSize: const Size.fromHeight(40), // NEW
               ),
             ),
           )
-
-
-
-
         ],
       ),
     );
-
     throw UnimplementedError();
   }
 }

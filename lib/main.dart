@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:quick_chat/login_screen.dart';
 import 'package:quick_chat/welcomescreen.dart';
+import 'package:quick_chat/Chat_Screen.dart';
+import 'package:quick_chat/Registration_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,6 +20,14 @@ class MyApp extends StatelessWidget {
        
         primarySwatch: Colors.blue,
       ),
+
+      initialRoute: homepage.id,
+      routes: {
+         homepage.id: (context)=> homepage(),
+        login.id: (context)=>login(),
+        registration.id : (context)=> registration(),
+        chat.id : (context)=> chat(),
+      },
       home: login(),
     );
   }
