@@ -3,38 +3,30 @@ import 'package:quick_chat/Registration_screen.dart';
 import 'package:quick_chat/login_screen.dart';
 
 class homepage extends StatefulWidget {
-  static String id='welcome_screen';
+  static String id = 'welcome_screen';
 
   @override
   State<homepage> createState() => _homepageState();
 }
 
-class _homepageState extends State<homepage> with SingleTickerProviderStateMixin {
-
+class _homepageState extends State<homepage>
+    with SingleTickerProviderStateMixin {
   late AnimationController controller;
 
   @override
   void initState() {
     super.initState();
 
-    controller = AnimationController(
-      duration: Duration(seconds: 5),
-        vsync: this);
+    controller =
+        AnimationController(duration: Duration(seconds: 5), vsync: this);
 
     controller.forward();
 
     controller.addListener(() {
-      setState(() {
-
-      });
+      setState(() {});
       print(controller.value);
     });
-
-
-
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +38,6 @@ class _homepageState extends State<homepage> with SingleTickerProviderStateMixin
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-
               Hero(
                 tag: 'logo',
                 child: Padding(
@@ -58,7 +49,6 @@ class _homepageState extends State<homepage> with SingleTickerProviderStateMixin
                   ),
                 ),
               ),
-
               Align(
                 alignment: Alignment.center,
                 child: Text(
@@ -75,7 +65,6 @@ class _homepageState extends State<homepage> with SingleTickerProviderStateMixin
               ElevatedButton(
                 onPressed: () {
                   Navigator.pushNamed(context, login.id);
-
                 },
                 child: Text("Login"),
                 style: ElevatedButton.styleFrom(
@@ -87,7 +76,6 @@ class _homepageState extends State<homepage> with SingleTickerProviderStateMixin
               ElevatedButton(
                 onPressed: () {
                   Navigator.pushNamed(context, registration.id);
-
                 },
                 child: Text("Registrer"),
                 style: ElevatedButton.styleFrom(

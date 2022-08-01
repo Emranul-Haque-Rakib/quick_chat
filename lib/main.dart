@@ -3,8 +3,12 @@ import 'package:quick_chat/login_screen.dart';
 import 'package:quick_chat/welcomescreen.dart';
 import 'package:quick_chat/Chat_Screen.dart';
 import 'package:quick_chat/Registration_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+void main() async {
+
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
