@@ -38,6 +38,15 @@ class _chatState extends State<chat> {
     }
   }
 
+
+  void messageStream() async {
+    await for(var snapshot in _firestore.collection('messages').snapshots()){
+      for( var message in snapshot.docs){
+        print(message.data());
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,8 +56,7 @@ class _chatState extends State<chat> {
           IconButton(
             icon: Icon(Icons.close),
             onPressed: () {
-              _auth.signOut();
-              Navigator.pop(context);
+              messageStream();
             },
           )
         ],
