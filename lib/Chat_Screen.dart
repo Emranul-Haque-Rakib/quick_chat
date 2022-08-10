@@ -28,7 +28,7 @@ class _chatState extends State<chat> {
 
   void getCurrentUser() async {
     try {
-      final user =  await FirebaseAuth.instance.currentUser;
+      final user = await FirebaseAuth.instance.currentUser;
       if (user != null) {
         LoggedInUser = user;
         print(LoggedInUser.email);
@@ -38,10 +38,9 @@ class _chatState extends State<chat> {
     }
   }
 
-
   void messageStream() async {
-    await for(var snapshot in _firestore.collection('messages').snapshots()){
-      for( var message in snapshot.docs){
+    await for (var snapshot in _firestore.collection('messages').snapshots()) {
+      for (var message in snapshot.docs) {
         print(message.data());
       }
     }
@@ -63,7 +62,29 @@ class _chatState extends State<chat> {
       ),
       body: SafeArea(
         child: Column(
-          children: [
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            StreamBuilder<QuerySnapshot>(
+              stream: _firestore.collection('messages').snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  final messages = snapshot.data!.docs;
+                  List<Text> messageWidgets = [];
+                  for (var message in messages) {
+                    final messageText = message.data();
+
+                    final messageWidget = Text('$messageText');
+
+                    messageWidgets.add(messageWidget);
+                  }
+                  return Column(
+                    children: messageWidgets,
+                  );
+                }
+                return Text("No widget to build");
+              },
+            ),
             Container(
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -75,9 +96,8 @@ class _chatState extends State<chat> {
                   )),
                   ElevatedButton(
                     onPressed: () {
-                      _firestore
-                          .collection('messages')
-                          .add({'text': messageText, 'sender': LoggedInUser.email});
+                      _firestore.collection('messages').add(
+                          {'text': messageText, 'sender': LoggedInUser.email});
                     },
                     child: Text("Send"),
                   )
