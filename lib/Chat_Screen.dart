@@ -61,50 +61,64 @@ class _chatState extends State<chat> {
         ],
       ),
       body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            StreamBuilder<QuerySnapshot>(
-              stream: _firestore.collection('messages').snapshots(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  final messages = snapshot.data!.docs;
-                  List<Text> messageWidgets = [];
-                  for (var message in messages) {
-                    final messageText = message.data();
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              StreamBuilder<QuerySnapshot>(
+                stream: _firestore.collection('messages').snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    final messages = snapshot.data!.docs;
+                    List<Text> messageWidgets = [];
 
-                    final messageWidget = Text('$messageText');
 
-                    messageWidgets.add(messageWidget);
+                    snapshot.data!.docs
+        .map((DocumentSnapshot document) {
+    Map<String, dynamic> data =
+    document.data()! as Map<String, dynamic>;
+
+
+
+                    for (var message in messages) {
+                      final messageText = message.get('text');
+                      final senderText = message.get('sender');
+
+
+                      final messageWidget = Text('$messageText from $senderText');
+                      //     final messageWidget= Text(data['text']);
+
+                      messageWidgets.add(messageWidget);
+                    }
+                    return Column(
+                      children: messageWidgets,
+                    );
                   }
-                  return Column(
-                    children: messageWidgets,
-                  );
-                }
-                return Text("No widget to build");
-              },
-            ),
-            Container(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Expanded(child: TextField(
-                    onChanged: (value) {
-                      messageText = value;
-                    },
-                  )),
-                  ElevatedButton(
-                    onPressed: () {
-                      _firestore.collection('messages').add(
-                          {'text': messageText, 'sender': LoggedInUser.email});
-                    },
-                    child: Text("Send"),
-                  )
-                ],
+                  return Text("No widget to build");
+                },
               ),
-            )
-          ],
+              Container(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Expanded(child: TextField(
+                      onChanged: (value) {
+                        messageText = value;
+                      },
+                    )),
+                    ElevatedButton(
+                      onPressed: () {
+                        _firestore.collection('messages').add(
+                            {'text': messageText, 'sender': LoggedInUser.email});
+                      },
+                      child: Text("Send"),
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
